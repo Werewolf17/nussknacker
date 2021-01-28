@@ -1,7 +1,5 @@
 package pl.touk.nussknacker.engine
 
-import cats.data.Validated.Valid
-import pl.touk.nussknacker.engine.Interpreter._
 import pl.touk.nussknacker.engine.api._
 import pl.touk.nussknacker.engine.api.exception.EspExceptionInfo
 import pl.touk.nussknacker.engine.api.test.InvocationCollectors.NodeContext
@@ -160,7 +158,7 @@ class Interpreter private(listeners: Seq[ProcessListener], expressionEvaluator: 
 
   //hmm... is this OK?
   private def outputValue(ctx: Context): Any =
-  ctx.getOrElse[Any](OutputParamName, new java.util.HashMap[String, Any]())
+  ctx.getOrElse[Any](ContextInterpreter.OutputVariableName, new java.util.HashMap[String, Any]())
 
   private def createOrUpdateVariable(ctx: Context, varName: String, fields: Seq[Field])
                                     (implicit ec: ExecutionContext, metaData: MetaData, node: Node): Context = {
@@ -198,11 +196,6 @@ class Interpreter private(listeners: Seq[ProcessListener], expressionEvaluator: 
 }
 
 object Interpreter {
-
-  final val InputParamName = "input"
-  final val MetaParamName = "meta"
-  final val OutputParamName = "output"
-
 
   def apply(listeners: Seq[ProcessListener],
             expressionEvaluator: ExpressionEvaluator) = {

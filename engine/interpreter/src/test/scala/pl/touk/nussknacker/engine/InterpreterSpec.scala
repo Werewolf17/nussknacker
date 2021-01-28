@@ -90,7 +90,7 @@ class InterpreterSpec extends FunSuite with Matchers {
     def compileNode(part: ProcessPart) =
       failOnErrors(compiledProcess.subPartCompiler.compile(part.node, part.validationContext).result)
 
-    val initialCtx = Context("abc").withVariable(Interpreter.InputParamName, transaction)
+    val initialCtx = Context("abc").withVariable(ContextInterpreter.InputVariableName, transaction)
 
     val resultBeforeSink = Await.result(interpreter.interpret(compileNode(parts.sources.head), process.metaData, initialCtx), 10 seconds) match {
       case Left(result) => result
