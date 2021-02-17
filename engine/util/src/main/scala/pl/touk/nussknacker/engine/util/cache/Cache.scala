@@ -1,8 +1,7 @@
 package pl.touk.nussknacker.engine.util.cache
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.Duration.{Inf, Undefined}
-import scala.concurrent.duration.{Deadline, Duration, FiniteDuration}
+import scala.concurrent.Future
+import scala.concurrent.duration.{Deadline, FiniteDuration}
 
 trait Cache[K, V] {
   def getOrCreate(key: K)(value: => V): V
@@ -34,9 +33,9 @@ object CacheConfig {
    * @param expireAfterAccess the expiration time from last action (read / write)
    * @param expireAfterWrite the expiration time after value was written to cache
    */
-  def apply[K, V](maximumSize: Long = CacheConfig.defaultMaximumSize,
+  def apply(maximumSize: Long = CacheConfig.defaultMaximumSize,
                   expireAfterAccess: Option[FiniteDuration] = None,
-                  expireAfterWrite: Option[FiniteDuration] = None): CacheConfig[K, V] =
+                  expireAfterWrite: Option[FiniteDuration] = None): CacheConfig[Any, Any] =
     new CacheConfig(maximumSize, FixedExpiryConfig(expireAfterAccess, expireAfterWrite))
 
   def apply[K, V](expiry: ExpiryConfig[K, V]): CacheConfig[K, V] =
